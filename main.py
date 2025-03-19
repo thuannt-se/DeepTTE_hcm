@@ -56,10 +56,10 @@ def train(model, elogger, train_set, eval_set):
 
     optimizer = optim.Adam(model.parameters(), lr = 1e-3)
 
-    for epoch in xrange(args.epochs):
-        print 'Training on epoch {}'.format(epoch)
+    for epoch in range(args.epochs):
+        print('Training on epoch {}'.format(epoch))
         for input_file in train_set:
-            print 'Train on file {}'.format(input_file)
+            print('Train on file {}'.format(input_file))
 
             # data loader, return two dictionaries, attr and traj
             data_iter = data_loader.get_loader(input_file, args.batch_size)
@@ -79,8 +79,8 @@ def train(model, elogger, train_set, eval_set):
 
                 running_loss += loss.data[0]
                 print '\r Progress {:.2f}%, average loss {}'.format((idx + 1) * 100.0 / len(data_iter), running_loss / (idx + 1.0)),
-            print
-            elogger.log('Training Epoch {}, File {}, Loss {}'.format(epoch, input_file, running_loss / (idx + 1.0)))
+                print()
+                elogger.log('Training Epoch {}, File {}, Loss {}'.format(epoch, input_file, running_loss / (idx + 1.0)))
 
         # evaluate the model after each epoch
         evaluate(model, elogger, eval_set, save_result = False)
@@ -120,19 +120,23 @@ def evaluate(model, elogger, files, save_result = False):
 
             running_loss += loss.data[0]
 
-        print 'Evaluate on file {}, loss {}'.format(input_file, running_loss / (idx + 1.0))
+        print ('Evaluate on file {}, loss {}'.format(input_file, running_loss / (idx + 1.0)))
         elogger.log('Evaluate File {}, Loss {}'.format(input_file, running_loss / (idx + 1.0)))
 
     if save_result: fs.close()
 
 def get_kwargs(model_class):
-    model_args = inspect.getargspec(model_class.__init__).args
-    shell_args = args._get_kwargs()
+    model_args = [
+        param.name
+        for param in inspect.signature(model_class.__init__).parameters.values()
+        if param.kind in (param.POSITIONAL_OR_KEYWORD, param.POSITIONAL_ONLY)
+    ]  # Use parameters.values() to access parameters and filter by kind
+    shell_args = args._get_kwargs()  # Assuming 'args' is a properly configured object
 
     kwargs = dict(shell_args)
 
     for arg, val in shell_args:
-        if not arg in model_args:
+        if arg not in model_args:  # Use 'not in' for more concise check
             kwargs.pop(arg)
 
     return kwargs
