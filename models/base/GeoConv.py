@@ -25,9 +25,7 @@ class Net(nn.Module):
         lngs = torch.unsqueeze(traj['lngs'], dim = 2)
         lats = torch.unsqueeze(traj['lats'], dim = 2)
 
-        states = self.state_em(traj['states'].long())
-
-        locs = torch.cat((lngs, lats, states), dim = 2)
+        locs = torch.cat((lngs, lats), dim = 2)
 
         # map the coords into 16-dim vector
         locs = F.tanh(self.process_coords(locs))

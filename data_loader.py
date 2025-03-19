@@ -22,8 +22,8 @@ class MySet(Dataset):
 
 def collate_fn(data):
     stat_attrs = ['dist', 'time']
-    info_attrs = ['driverID', 'dateID', 'weekID', 'timeID']
-    traj_attrs = ['lngs', 'lats', 'states', 'time_gap', 'dist_gap']
+    info_attrs = ['dateID', 'weekID', 'timeID']
+    traj_attrs = ['lngs', 'lats', 'time_gap', 'dist_gap']
 
     attr, traj = {}, {}
 
