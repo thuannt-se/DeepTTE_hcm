@@ -1,20 +1,21 @@
 {
-    "dist_gap_mean": 0.081870,
-    "dist_gap_std": 0.014296,
+    "dist_gap_mean": 2.823112,
+    "dist_gap_std": 0.021836,
     "time_gap_mean": 410.466894,
-    "time_gap_std": 185.836927,
-    "lngs_std": 0.017230,
-    "lngs_mean": 106.667572,
-    "lats_mean": 10.789828,
-    "dist_std": 2.350317,
+    "time_gap_std": 3.136344,
+    "lngs_std": 0.000288,
+    "lngs_mean": 106.667872,
+    "lats_mean": 10.789404,
+    "dist_std": 0.038884,
     "dist_mean": 5.481572,
-    "lats_std": 0.022636,
+    "lats_std": 0.000393,
     "time_mean": 827.475611,
-    "time_std": 346.295437,
-    "train_set": ["train_0", "train_1", "train_2", "train_3", "train_4", "train_5", "train_6", "train_7", "train_8", "train_9", "train_10", "train_11", "train_12", "train_13", "train_14", "train_15"
+    "time_std": 5.611370,
+    "train_set": ["train_00", "train_01", "train_02", "train_03", "train_04", "train_05", "train_06", "train_07", "train_08", "train_09", "train_10", "train_11", "train_12", "train_13", "train_14", "train_15"
     ,"train_16", "train_17", "train_18", "train_19","train_20", "train_21", "train_22", "train_23","train_24", "train_25", "train_26", "train_27","train_28", "train_29", "train_29", "train_30"
     ,"train_31", "train_32", "train_33", "train_34","train_35", "train_36", "train_37", "train_38","train_39", "train_40", "train_41", "train_42","train_43", "train_44", "train_45", "train_46"
     ,"train_47", "train_48"],
     "eval_set": ["train_49"],
-    "test_set": ["test_0", "test_1","test_2","test_3","test_4","test_5","test_6"]
+    "test_set1": ["hanoi_test_00", "hanoi_test_01"],
+    "test_set": ["test_00", "test_01","test_02","test_03","test_04","test_05","test_06"]
 }

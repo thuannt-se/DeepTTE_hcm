@@ -11,14 +11,14 @@ import ujson as json
 class MySet(Dataset):
     def __init__(self, input_file):
         self.content = open('./data/' + input_file, 'r').readlines()
-        self.content = map(lambda x: json.loads(x), self.content)
-        self.lengths = map(lambda x: len(x['lngs']), self.content)
+        self.content = list(map(lambda x: json.loads(x), self.content))
+        self.lengths =list(map(lambda x: len(list(x['lngs'])), self.content))
 
     def __getitem__(self, idx):
         return self.content[idx]
 
     def __len__(self):
-        return len(self.content)
+      return len(self.content)
 
 def collate_fn(data):
     stat_attrs = ['dist', 'time']
@@ -37,17 +37,22 @@ def collate_fn(data):
         attr[key] = torch.LongTensor([item[key] for item in data])
 
     for key in traj_attrs:
-        # pad to the max length
-        seqs = np.asarray([item[key] for item in data])
-        mask = np.arange(lens.max()) < lens[:, None]
-        padded = np.zeros(mask.shape, dtype = np.float32)
-        padded[mask] = np.concatenate(seqs)
+        # Get maximum length for padding
+        max_len = max(len(item[key]) for item in data)
+        
+        # Pad sequences to the maximum length
+        padded_seqs = [
+            np.pad(item[key], (0, max_len - len(item[key])), 'constant', constant_values=0)
+            for item in data
+        ]
 
+        # Convert to NumPy array and apply normalization
+        padded = np.asarray(padded_seqs, dtype=np.float32)
         if key in ['lngs', 'lats', 'time_gap', 'dist_gap']:
             padded = utils.normalize(padded, key)
 
-        padded = torch.from_numpy(padded).float()
-        traj[key] = padded
+        # Convert to PyTorch tensor
+        traj[key] = torch.from_numpy(padded).float()
 
     lens = lens.tolist()
     traj['lens'] = lens
@@ -58,8 +63,8 @@ class BatchSampler:
     def __init__(self, dataset, batch_size):
         self.count = len(dataset)
         self.batch_size = batch_size
-        self.lengths = dataset.lengths
-        self.indices = range(self.count)
+        self.lengths = list(dataset.lengths)
+        self.indices = list(range(self.count))
 
     def __iter__(self):
         '''
@@ -71,7 +76,6 @@ class BatchSampler:
         chunk_size = self.batch_size * 100
 
         chunks = (self.count + chunk_size - 1) // chunk_size
-
         # re-arrange indices to minimize the padding
         for i in range(chunks):
             partial_indices = self.indices[i * chunk_size: (i + 1) * chunk_size]
