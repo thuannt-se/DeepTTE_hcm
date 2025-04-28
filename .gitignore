@@ -7,3 +7,9 @@
 #foloders
 logs/*
 
+.idea/workspace.xml
+.idea/misc.xml
+.idea/jupyter-settings.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/DeepTTE_hcm.iml
+.DS_Store

@@ -17,5 +17,6 @@
     ,"train_47", "train_48"],
     "eval_set": ["train_49"],
     "test_set1": ["hanoi_test_00", "hanoi_test_01"],
-    "test_set": ["test_00", "test_01","test_02","test_03","test_04","test_05","test_06"]
+    "test_set2": ["test_00", "test_01","test_02","test_03","test_04","test_05","test_06"],
+    "test_set": ["BACHKHOA_CHOBENTHANH_test"]
 }
