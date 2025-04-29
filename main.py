@@ -53,6 +53,7 @@ os.makedirs(os.path.dirname(mse_file_path), exist_ok=True)
 
 
 def train(model, elogger, train_set, eval_set):
+    main_start_time = time.time()
     # record the experiment setting
     elogger.log(str(model))
     elogger.log(str(args._get_kwargs()))
@@ -66,6 +67,7 @@ def train(model, elogger, train_set, eval_set):
 
     mse_loss = []
     for epoch in range(args.epochs):
+        epoch_start_time = time.time()
         print('Training on epoch {}'.format(epoch))
         for input_file in train_set:
             print('Train on file {}'.format(input_file))
@@ -92,6 +94,8 @@ def train(model, elogger, train_set, eval_set):
                 print('\r Progress {:.2f}%, average loss {}'.format((idx + 1) * 100.0 / len(data_iter), average_loss)),
                 print()
                 elogger.log('Training Epoch {}, File {}, Loss {}'.format(epoch, input_file, average_loss))
+                epoch_training_time = time.time() - epoch_start_time
+                elogger.log(f"Epoch trainning time: {epoch_training_time % 60:.1f}s")
                 
 
         # evaluate the model after each epoch
@@ -102,6 +106,8 @@ def train(model, elogger, train_set, eval_set):
         elogger.log('Save weight file {}'.format(weight_name))
         torch.save(model.state_dict(), './saved_weights/' + weight_name)
         mse_loss.append(loss)
+    trained_time = time.time() - main_start_time
+    elogger.log(f"Total trainning time: {trained_time // 60:.0f}m {trained_time % 60:.1f}s")
     write_csv(mse_loss)
 
 def write_csv(mse_values):
